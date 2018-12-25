@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/vbahmatovich/pig/db"
-	"github.com/vbahmatovich/pig/file"
+	"github.com/bfg-dev/pig/db"
+	"github.com/bfg-dev/pig/file"
 )
 
 // Manager - operation manager
@@ -84,6 +84,8 @@ func (o *Manager) loadRawMigrations() (*Migrations, error) {
 			Children:     nil,
 			Name:         dbrec.Name,
 			Filename:     dbrec.Filename,
+			Note:         stringPointerToString(dbrec.Note),
+			GITinfo:      stringPointerToString(dbrec.GITinfo),
 			Applied:      dbrec.Applied,
 			TStamp:       dbrec.TStamp,
 			DBShortRec:   dbrec,

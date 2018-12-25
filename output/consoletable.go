@@ -6,11 +6,11 @@ import (
 	"os"
 	"strings"
 
+	"github.com/bfg-dev/pig/db"
+	"github.com/bfg-dev/pig/file"
+	"github.com/bfg-dev/pig/migration"
 	"github.com/fatih/color"
 	"github.com/olekukonko/tablewriter"
-	"github.com/vbahmatovich/pig/db"
-	"github.com/vbahmatovich/pig/file"
-	"github.com/vbahmatovich/pig/migration"
 )
 
 var (

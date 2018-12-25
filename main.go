@@ -10,9 +10,9 @@ import (
 	"log"
 	"os"
 
+	"github.com/bfg-dev/pig/migration"
+	"github.com/bfg-dev/pig/output"
 	_ "github.com/lib/pq"
-	"github.com/vbahmatovich/pig/migration"
-	"github.com/vbahmatovich/pig/output"
 )
 
 var (
