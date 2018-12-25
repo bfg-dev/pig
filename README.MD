@@ -82,6 +82,12 @@ CREATE TABLE purchases (
 DROP TABLE purchases;
 ```
 
+Init db
+
+```
+$ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" init 
+```
+
 Let`s view the UP plan
 
 ```
