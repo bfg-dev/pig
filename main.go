@@ -33,20 +33,20 @@ Options:
 
 	usageCommands = `
 Commands:
-		init                     Init database
+    init                     Init database
     up                       Up all available migrations
-		up-migration NAME        Up a specific NAME
-		up-gitinfo GITINFO       Up a specific GITINFO (affects only known migrations)
-		up-note NOTE             Up a specific NOTE (affects only known migrations)
-		down-migration NAME      Roll back a specific NAME
-		down-gitinfo GITINFO     Roll back a specific GITINFO
-		down-note NOTE           Roll back a specific NOTE
+    up-migration NAME        Up a specific NAME
+    up-gitinfo GITINFO       Up a specific GITINFO (affects only known migrations)
+    up-note NOTE             Up a specific NOTE (affects only known migrations)
+    down-migration NAME      Roll back a specific NAME
+    down-gitinfo GITINFO     Roll back a specific GITINFO
+    down-note NOTE           Roll back a specific NOTE
     reset                    Roll back all migrations
     status                   Dump the migration status
-		history							     Show migration history
-		history-migration NAME	 Show history for a specific NAME
-		history-gitinfo GITINFO  Show history for a specific GITINFO
-		history-note NOTE	       Show history for a specific NOTE
+    history							     Show migration history
+    history-migration NAME	 Show history for a specific NAME
+    history-gitinfo GITINFO  Show history for a specific GITINFO
+    history-note NOTE	       Show history for a specific NOTE
 `
 )
 
