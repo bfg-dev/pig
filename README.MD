@@ -10,7 +10,7 @@ You can find this files in test-data/readme-example
 
 Users.sql
 
-```
+```sql
 -- +pig Name: Create users
 -- +pig Up
 CREATE TABLE users (
@@ -28,7 +28,7 @@ DROP TABLE users;
 
 AddAgeToUsers.sql
 
-```
+```sql
 -- +pig Name: Add age to users table
 -- +pig Requiremets: Create users
 -- +pig Up
@@ -40,7 +40,7 @@ ALTER TABLE users DROP COLUMN age;
 
 Goods.sql
 
-```
+```sql
 -- +pig Name: Create goods
 -- +pig Up
 CREATE TABLE goods (
@@ -55,7 +55,7 @@ DROP TABLE goods;
 
 AddCostToGoods.sql
 
-```
+```sql
 -- +pig Name: Add cost to goods table
 -- +pig Requiremets: Create goods
 -- +pig Up
@@ -67,7 +67,7 @@ ALTER TABLE goods DROP COLUMN cost;
 
 Purchases.sql
 
-```
+```sql
 -- +pig Name: Create purchases
 -- +pig Requiremets: Create users, Create goods
 -- +pig Up
@@ -84,13 +84,13 @@ DROP TABLE purchases;
 
 Init db
 
-```
+```bash
 $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" init 
 ```
 
 Let`s view the UP plan
 
-```
+```bash
 $ pig -only-plan -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" up
 2018/12/25 16:49:07 [UP plan]
 +----+---------------------+-------------------------+--------------------+----------------------------+------------+---------+
@@ -106,7 +106,7 @@ $ pig -only-plan -dir test_data/readme-example "user=pig dbname=pig sslmode=disa
 
 Looks good. Let`s apply it!
 
-```
+```bash
 $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" up
 2018/12/25 16:51:58 [UP plan]
 +----+---------------------+-------------------------+--------------------+----------------------------+------------+---------+
@@ -128,7 +128,7 @@ $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" up
 
 What about status?
 
-```
+```bash
 $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" status
 2018/12/25 16:56:00 [Status]
 +----+---------------------+-------------------------+--------------------+----------------------------+------------+---------+
@@ -146,7 +146,7 @@ Now, we can "play" with our example.
 
 First, reset db
 
-```
+```bash
 $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" reset
 2018/12/25 16:57:25 [DOWN plan]
 +----+---------------------+-------------------------+--------------------+----------------------------+------------+---------+
@@ -168,7 +168,7 @@ $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" reset
 
 Now, apply "Add age to users table" with note "Users"
 
-```
+```bash
 $ pig -note "Users" -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" up-migration "Add age to users table"
 2018/12/25 16:58:51 [UP plan for  Add age to users table]
 +----+---------------------+------------------------+-------------------+--------------+------------+---------+
@@ -186,7 +186,7 @@ As you can see, "Create users" automatically applied
 
 Let`s apply "Create purchases" with note "Purchases"
 
-```
+```bash
 $ pig -note "Purchases" -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" up-migration "Create purchases"
 2018/12/25 17:01:24 [UP plan for  Create purchases]
 +----+---------------------+------------------+---------------+----------------------------+------------+---------+
@@ -202,8 +202,8 @@ $ pig -note "Purchases" -dir test_data/readme-example "user=pig dbname=pig sslmo
 
 History time!
 
-```
-$ go run main.go -dir test_data/readme-example "user=druid dbname=testme sslmode=disable" history
+```bash
+$ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" history
 2018/12/25 17:02:18 [History]
 +----+---------------------+-------------------------+------------+-----------+----------+--------------------+
 | ID |        WHEN         |          NAME           | IS APPLIED |   NOTE    | GIT INFO |      FILENAME      |
@@ -237,7 +237,7 @@ $ go run main.go -dir test_data/readme-example "user=druid dbname=testme sslmode
 
 Now, try to rollback migrations with note "Users"
 
-```
+```bash
 $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" down-note "Users"
 2018/12/25 17:06:06 [DOWN plan for Users]
 +----+---------------------+------------------------+-------------------+----------------------------+------------+---------+
