@@ -135,6 +135,10 @@ func (o *Manager) parseRequirements(migrations *Migrations) error {
 			rawRequirements = mig.FileFullRec.Requirements
 		}
 
+		if len(rawRequirements) == 1 && rawRequirements[0] == "" {
+			continue
+		}
+
 		for _, rawReq := range rawRequirements {
 			req := migrations.GetByName(rawReq)
 			if req == nil {
