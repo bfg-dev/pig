@@ -122,29 +122,70 @@ func PrintFullFileTable(records []*file.RecFull) {
 }
 
 // PrintMigrations - print small table
-func PrintMigrations(records *migration.Migrations) {
+func PrintMigrations(records *migration.Migrations, hideFilename bool) {
 	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"ID", "Timestamp", "Name", "Filename", "Requirements", "Is applied", "Pending"})
+	if hideFilename {
+		table.SetHeader([]string{"ID", "Timestamp", "Name", "Requirements", "Is applied", "Pending"})
 
-	table.SetHeaderColor(
-		tablewriter.Colors{tablewriter.Bold},
-		tablewriter.Colors{tablewriter.Bold},
-		tablewriter.Colors{tablewriter.Bold},
-		tablewriter.Colors{tablewriter.Bold},
-		tablewriter.Colors{tablewriter.Bold},
-		tablewriter.Colors{tablewriter.Bold},
-		tablewriter.Colors{tablewriter.Bold},
-	)
+		table.SetHeaderColor(
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+		)
 
-	table.SetColumnColor(
-		tablewriter.Colors{tablewriter.FgHiBlackColor},
-		tablewriter.Colors{},
-		tablewriter.Colors{tablewriter.FgHiBlueColor},
-		tablewriter.Colors{},
-		tablewriter.Colors{tablewriter.FgCyanColor},
-		tablewriter.Colors{tablewriter.FgYellowColor},
-		tablewriter.Colors{tablewriter.FgRedColor},
-	)
+		table.SetHeaderColor(
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+		)
+
+		table.SetColumnColor(
+			tablewriter.Colors{tablewriter.FgHiBlackColor},
+			tablewriter.Colors{},
+			tablewriter.Colors{tablewriter.FgHiBlueColor},
+			tablewriter.Colors{tablewriter.FgCyanColor},
+			tablewriter.Colors{tablewriter.FgYellowColor},
+			tablewriter.Colors{tablewriter.FgRedColor},
+		)
+	} else {
+		table.SetHeader([]string{"ID", "Timestamp", "Name", "Filename", "Requirements", "Is applied", "Pending"})
+
+		table.SetHeaderColor(
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+		)
+
+		table.SetHeaderColor(
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+			tablewriter.Colors{tablewriter.Bold},
+		)
+
+		table.SetColumnColor(
+			tablewriter.Colors{tablewriter.FgHiBlackColor},
+			tablewriter.Colors{},
+			tablewriter.Colors{tablewriter.FgHiBlueColor},
+			tablewriter.Colors{},
+			tablewriter.Colors{tablewriter.FgCyanColor},
+			tablewriter.Colors{tablewriter.FgYellowColor},
+			tablewriter.Colors{tablewriter.FgRedColor},
+		)
+	}
 
 	for _, record := range records.Items {
 		recordID := "?"
@@ -157,15 +198,26 @@ func PrintMigrations(records *migration.Migrations) {
 			recordRequirements = append(recordRequirements, req.Name)
 		}
 
-		table.Append([]string{
-			recordID,
-			record.TStamp.Format("2006-01-02 15:04:05"),
-			record.Name,
-			record.Filename,
-			strings.Join(recordRequirements, ", "),
-			fmt.Sprintf("%v", record.Applied),
-			fmt.Sprintf("%v", record.Pending),
-		})
+		if hideFilename {
+			table.Append([]string{
+				recordID,
+				record.TStamp.Format("2006-01-02 15:04:05"),
+				record.Name,
+				strings.Join(recordRequirements, ", "),
+				fmt.Sprintf("%v", record.Applied),
+				fmt.Sprintf("%v", record.Pending),
+			})
+		} else {
+			table.Append([]string{
+				recordID,
+				record.TStamp.Format("2006-01-02 15:04:05"),
+				record.Name,
+				record.Filename,
+				strings.Join(recordRequirements, ", "),
+				fmt.Sprintf("%v", record.Applied),
+				fmt.Sprintf("%v", record.Pending),
+			})
+		}
 	}
 	table.Render() // Send output
 }

@@ -283,6 +283,7 @@ Text must/may contain some notations:
 * **note** any string (applied only on UP)
 * **gitinfo** any string, but recommended branch/tag name (applied only on UP)
 * **only-plan** show plan wuthout execution
+* **hide-filename** hide filename in output tables
 
 ## Commands
 
