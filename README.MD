@@ -96,7 +96,7 @@ Init db
 
 ```bash
 
-$ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" init
+pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" init
 
 ```
 
