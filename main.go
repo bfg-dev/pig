@@ -114,7 +114,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(upMigrations)
+		output.PrintMigrations(upMigrations, *hideFilename)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteUp, upMigrations, note, gitinfo)
 		}
@@ -127,7 +127,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(upMigrations, hideFilename)
+		output.PrintMigrations(upMigrations, *hideFilename)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteUp, upMigrations, note, gitinfo)
 		}
@@ -140,7 +140,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(upMigrations, hideFilename)
+		output.PrintMigrations(upMigrations, *hideFilename)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteUp, upMigrations, note, gitinfo)
 		}
@@ -153,7 +153,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(upMigrations, hideFilename)
+		output.PrintMigrations(upMigrations, *hideFilename)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteUp, upMigrations, note, gitinfo)
 		}
@@ -166,7 +166,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(downMigrations, hideFilename)
+		output.PrintMigrations(downMigrations, *hideFilename)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteDown, downMigrations, note, gitinfo)
 		}
@@ -179,7 +179,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(downMigrations, hideFilename)
+		output.PrintMigrations(downMigrations, *hideFilename)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteDown, downMigrations, note, gitinfo)
 		}
@@ -192,7 +192,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(downMigrations, hideFilename)
+		output.PrintMigrations(downMigrations, *hideFilename)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteDown, downMigrations, note, gitinfo)
 		}
@@ -202,7 +202,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(downMigrations, hideFilename)
+		output.PrintMigrations(downMigrations, *hideFilename)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteDown, downMigrations, note, gitinfo)
 		}
@@ -212,7 +212,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(allMigrations, hideFilename)
+		output.PrintMigrations(allMigrations, *hideFilename)
 	case "init":
 		output.Info2("Initiating database")
 		if err := manager.InitDB(); err != nil {

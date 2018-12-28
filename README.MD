@@ -11,6 +11,7 @@ You can find this files in test-data/readme-example
 Users.sql
 
 ```sql
+
 -- +pig Name: Create users
 -- +pig Up
 CREATE TABLE users (
@@ -24,11 +25,13 @@ CREATE TABLE users (
 
 -- +pig Down
 DROP TABLE users;
+
 ```
 
 AddAgeToUsers.sql
 
 ```sql
+
 -- +pig Name: Add age to users table
 -- +pig Requiremets: Create users
 -- +pig Up
@@ -36,11 +39,13 @@ ALTER TABLE users ADD COLUMN age INTEGER;
 
 -- +pig Down
 ALTER TABLE users DROP COLUMN age;
+
 ```
 
 Goods.sql
 
 ```sql
+
 -- +pig Name: Create goods
 -- +pig Up
 CREATE TABLE goods (
@@ -51,11 +56,13 @@ CREATE TABLE goods (
 
 -- +pig Down
 DROP TABLE goods;
+
 ```
 
 AddCostToGoods.sql
 
 ```sql
+
 -- +pig Name: Add cost to goods table
 -- +pig Requiremets: Create goods
 -- +pig Up
@@ -63,11 +70,13 @@ ALTER TABLE goods ADD COLUMN cost INTEGER;
 
 -- +pig Down
 ALTER TABLE goods DROP COLUMN cost;
+
 ```
 
 Purchases.sql
 
 ```sql
+
 -- +pig Name: Create purchases
 -- +pig Requiremets: Create users, Create goods
 -- +pig Up
@@ -80,17 +89,21 @@ CREATE TABLE purchases (
 
 -- +pig Down
 DROP TABLE purchases;
+
 ```
 
 Init db
 
 ```bash
-$ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" init 
+
+$ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" init
+
 ```
 
 Let`s view the UP plan
 
 ```bash
+
 $ pig -only-plan -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" up
 2018/12/25 16:49:07 [UP plan]
 +----+---------------------+-------------------------+--------------------+----------------------------+------------+---------+
@@ -102,11 +115,13 @@ $ pig -only-plan -dir test_data/readme-example "user=pig dbname=pig sslmode=disa
 | ?  | 2018-12-25 16:44:19 | Add cost to goods table | AddCostToGoods.sql | Create goods               | false      | true    |
 | ?  | 2018-12-25 16:46:50 | Create purchases        | Purchases.sql      | Create users, Create goods | false      | true    |
 +----+---------------------+-------------------------+--------------------+----------------------------+------------+---------+
+
 ```
 
 Looks good. Let`s apply it!
 
 ```bash
+
 $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" up
 2018/12/25 16:51:58 [UP plan]
 +----+---------------------+-------------------------+--------------------+----------------------------+------------+---------+
@@ -124,11 +139,13 @@ $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" up
 2018/12/25 16:51:58 [Executing:  Add cost to goods table]
 2018/12/25 16:51:58 [Executing:  Create purchases]
 2018/12/25 16:51:58 [All migrations executed]
+
 ```
 
 What about status?
 
 ```bash
+
 $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" status
 2018/12/25 16:56:00 [Status]
 +----+---------------------+-------------------------+--------------------+----------------------------+------------+---------+
@@ -140,6 +157,7 @@ $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" status
 | 4  | 2018-12-25 16:44:19 | Add cost to goods table | AddCostToGoods.sql | Create goods               | true       | false   |
 | 5  | 2018-12-25 16:46:50 | Create purchases        | Purchases.sql      | Create users, Create goods | true       | false   |
 +----+---------------------+-------------------------+--------------------+----------------------------+------------+---------+
+
 ```
 
 Now, we can "play" with our example.
@@ -147,6 +165,7 @@ Now, we can "play" with our example.
 First, reset db
 
 ```bash
+
 $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" reset
 2018/12/25 16:57:25 [DOWN plan]
 +----+---------------------+-------------------------+--------------------+----------------------------+------------+---------+
@@ -164,11 +183,13 @@ $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" reset
 2018/12/25 16:57:25 [Executing:  Add cost to goods table]
 2018/12/25 16:57:25 [Executing:  Create goods]
 2018/12/25 16:57:25 [All migrations executed]
+
 ```
 
 Now, apply "Add age to users table" with note "Users"
 
 ```bash
+
 $ pig -note "Users" -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" up-migration "Add age to users table"
 2018/12/25 16:58:51 [UP plan for  Add age to users table]
 +----+---------------------+------------------------+-------------------+--------------+------------+---------+
@@ -180,6 +201,7 @@ $ pig -note "Users" -dir test_data/readme-example "user=pig dbname=pig sslmode=d
 2018/12/25 16:58:51 [Executing:  Create users]
 2018/12/25 16:58:51 [Executing:  Add age to users table]
 2018/12/25 16:58:51 [All migrations executed]
+
 ```
 
 As you can see, "Create users" automatically applied
@@ -187,6 +209,7 @@ As you can see, "Create users" automatically applied
 Let`s apply "Create purchases" with note "Purchases"
 
 ```bash
+
 $ pig -note "Purchases" -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" up-migration "Create purchases"
 2018/12/25 17:01:24 [UP plan for  Create purchases]
 +----+---------------------+------------------+---------------+----------------------------+------------+---------+
@@ -198,11 +221,13 @@ $ pig -note "Purchases" -dir test_data/readme-example "user=pig dbname=pig sslmo
 2018/12/25 17:01:24 [Executing:  Create goods]
 2018/12/25 17:01:24 [Executing:  Create purchases]
 2018/12/25 17:01:24 [All migrations executed]
+
 ```
 
 History time!
 
 ```bash
+
 $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" history
 2018/12/25 17:02:18 [History]
 +----+---------------------+-------------------------+------------+-----------+----------+--------------------+
@@ -233,11 +258,13 @@ $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" histor
 | 23 | 2018-12-25 17:01:24 | Create goods            | +          | Purchases |          | Goods.sql          |
 | 24 | 2018-12-25 17:01:24 | Create purchases        | +          | Purchases |          | Purchases.sql      |
 +----+---------------------+-------------------------+------------+-----------+----------+--------------------+
+
 ```
 
 Now, try to rollback migrations with note "Users"
 
 ```bash
+
 $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" down-note "Users"
 2018/12/25 17:06:06 [DOWN plan for Users]
 +----+---------------------+------------------------+-------------------+----------------------------+------------+---------+
@@ -251,6 +278,7 @@ $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" down-n
 2018/12/25 17:06:06 [Executing:  Create purchases]
 2018/12/25 17:06:06 [Executing:  Create users]
 2018/12/25 17:06:06 [All migrations executed]
+
 ```
 
 All "Users" migrations have been rolled back! Why? Because of requirements :)
@@ -300,4 +328,4 @@ Text must/may contain some notations:
 * **history** Show migration history
 * **history-migration NAME** Show history for a specific NAME
 * **history-gitinfo GITINFO** Show history for a specific GITINFO
-* **history-note NOTE**	 Show history for a specific NOTE
+* **history-note NOTE** Show history for a specific NOTE
