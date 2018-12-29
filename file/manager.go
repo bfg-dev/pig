@@ -51,15 +51,15 @@ func (m *RecManager) GetAllShort() ([]*RecShort, error) {
 
 // parseFile - parse sql file into full record
 func (m *RecManager) parseFile(rec *RecFull) error {
-	sqlbytedata, err := ioutil.ReadFile(filepath.Join(m.dir, rec.Filename))
+	sqlByteData, err := ioutil.ReadFile(filepath.Join(m.dir, rec.Filename))
 	if err != nil {
 		return err
 	}
 
-	sqlData := string(sqlbytedata)
+	sqlData := string(sqlByteData)
 	rec.SQLData = &sqlData
 
-	scanner := bufio.NewScanner(bytes.NewReader(sqlbytedata))
+	scanner := bufio.NewScanner(bytes.NewReader(sqlByteData))
 
 	for scanner.Scan() {
 		line := scanner.Text()
