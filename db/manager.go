@@ -68,6 +68,7 @@ func (m *RecManager) getShort(where string) ([]*RecShort, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		row := &RecShort{}
@@ -99,6 +100,7 @@ func (m *RecManager) getFull(where string) ([]*RecFull, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		row := &RecFull{}
@@ -163,6 +165,7 @@ func (m *RecManager) getHistory(where string) ([]*RecHistory, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		row := &RecHistory{}
