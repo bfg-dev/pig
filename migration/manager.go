@@ -142,7 +142,7 @@ func (o *Manager) parseRequirements(migrations *Migrations) error {
 		for _, rawReq := range rawRequirements {
 			req := migrations.GetByName(rawReq)
 			if req == nil {
-				return &RequrementNotFoundError{Migration: mig, Requirement: rawReq}
+				return &RequirementNotFoundError{Migration: mig, Requirement: rawReq}
 			}
 
 			if err := mig.AddRequirement(req); err != nil {

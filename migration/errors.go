@@ -11,32 +11,32 @@ func (e *LoopError) Error() string {
 	return fmt.Sprintf("Loop detected: last migration in the loop '%v'", e.LastMigration)
 }
 
-// RequrementNotFoundError - requirement error
-type RequrementNotFoundError struct {
+// RequirementNotFoundError - requirement error
+type RequirementNotFoundError struct {
 	Migration   *Meta
 	Requirement string
 }
 
-func (e *RequrementNotFoundError) Error() string {
+func (e *RequirementNotFoundError) Error() string {
 	return fmt.Sprintf("Can not find requirement with name %v for %v", e.Requirement, e.Migration)
 }
 
-// RequrementDuplicateError - Migration meta requirement
-type RequrementDuplicateError struct {
+// RequirementDuplicateError - Migration meta requirement
+type RequirementDuplicateError struct {
 	Migration   *Meta
 	Requirement *Meta
 }
 
-func (e *RequrementDuplicateError) Error() string {
+func (e *RequirementDuplicateError) Error() string {
 	return fmt.Sprintf("Requirement duplicate in %v (%v)", e.Migration, e.Requirement)
 }
 
-// NullRequrement - requirement error
-type NullRequrement struct {
+// NullRequirement - requirement error
+type NullRequirement struct {
 	Migration *Meta
 }
 
-func (e *NullRequrement) Error() string {
+func (e *NullRequirement) Error() string {
 	return fmt.Sprintf("Can not add null requirement to %v", e.Migration)
 }
 

@@ -130,19 +130,19 @@ func (mm *Meta) String() string {
 // AddRequirement - add requirement to the migration
 func (mm *Meta) AddRequirement(req *Meta) error {
 	if req == nil {
-		return &NullRequrement{Migration: mm}
+		return &NullRequirement{Migration: mm}
 	}
 
 	for _, r := range mm.Requirements {
 		if r.Name == req.Name {
-			return &RequrementDuplicateError{Migration: mm, Requirement: req}
+			return &RequirementDuplicateError{Migration: mm, Requirement: req}
 		}
 	}
 	mm.Requirements = append(mm.Requirements, req)
 
 	for _, c := range req.Children {
 		if c.Name == mm.Name {
-			return &RequrementDuplicateError{Migration: req, Requirement: mm}
+			return &RequirementDuplicateError{Migration: req, Requirement: mm}
 		}
 	}
 	req.Children = append(req.Children, mm)
