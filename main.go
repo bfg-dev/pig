@@ -34,20 +34,22 @@ Options:
 
 	usageCommands = `
 Commands:
-    init                     Init database
-    up                       Up all available migrations
-    up-migration NAME        Up a specific NAME
-    up-gitinfo GITINFO       Up a specific GITINFO (affects only known migrations)
-    up-note NOTE             Up a specific NOTE (affects only known migrations)
-    down-migration NAME      Roll back a specific NAME
-    down-gitinfo GITINFO     Roll back a specific GITINFO
-    down-note NOTE           Roll back a specific NOTE
-    reset                    Roll back all migrations
-    status                   Dump the migration status
-    history							     Show migration history
-    history-migration NAME	 Show history for a specific NAME
-    history-gitinfo GITINFO  Show history for a specific GITINFO
-    history-note NOTE	       Show history for a specific NOTE
+    init                            Init database
+    up                              Up all available migrations
+    up-migration NAME               Up a specific NAME
+    up-gitinfo GITINFO              Up a specific GITINFO (affects only known migrations)
+    up-note NOTE                    Up a specific NOTE (affects only known migrations)
+    down-migration NAME             Roll back a specific NAME
+    down-gitinfo GITINFO            Roll back a specific GITINFO
+    down-note NOTE                  Roll back a specific NOTE
+    reset                           Roll back all migrations
+    status                          Dump the migration status
+    history							            Show migration history
+    history-migration NAME	        Show history for a specific NAME
+    history-gitinfo GITINFO         Show history for a specific GITINFO
+		history-note NOTE	              Show history for a specific NOTE
+		graph [pngname]                 Draw png graph. (default pngname is output.png)
+		graph-migration NAME [pngname]  Draw png graph for specific NAME (default pngname is NAME.png)
 `
 )
 
@@ -265,7 +267,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 			output.Fatal(err)
 		}
 		if !output.CheckGraphviz() {
-			output.Fatal("Graphviz not found. Please install it.")
+			output.Fatal("Graphviz not found. Please install it. [https://www.graphviz.org/download/]")
 		}
 		if len(args) != 0 {
 			filename = args[0]
@@ -287,7 +289,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 			output.Fatal(err)
 		}
 		if !output.CheckGraphviz() {
-			output.Fatal("Graphviz not found. Please install it.")
+			output.Fatal("Graphviz not found. Please install it. [https://www.graphviz.org/download/]")
 		}
 		if len(args) >= 2 {
 			filename = args[1]

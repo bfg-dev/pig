@@ -283,6 +283,26 @@ $ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" down-n
 
 All "Users" migrations have been rolled back! Why? Because of requirements :)
 
+Need some visualization? Install [graphviz](https://www.graphviz.org/download/) and run
+
+```bash
+
+$ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" graph scheme.png
+
+```
+
+![scheme.png](test_data/readme-example/scheme.png)
+
+Or you can "draw" one migration
+
+```bash
+
+$ pig -dir test_data/readme-example "user=pig dbname=pig sslmode=disable" graph-migration "Create purchases"
+
+```
+
+![create_purchases.png](test_data/readme-example/create_purchases.png)
+
 ## Features
 
 * Any file name, no strong sequence
@@ -290,6 +310,7 @@ All "Users" migrations have been rolled back! Why? Because of requirements :)
 * You can safely edit sql files, just rollback and up it again
 * Easy usage with CI (you can add git information and use it for mass rollback)
 * Colors in terminal :)
+* Visualization of requirements
 
 ## File format
 

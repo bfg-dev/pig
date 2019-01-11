@@ -47,10 +47,10 @@ func GraphPng(migs *migration.Migrations, filename string) error {
 	for _, item := range migs.Items {
 		for _, req := range item.Requirements {
 			dotData += fmt.Sprintf("\"%v\" -> \"%v\" [color=\"%v\"];\n", item.Name, req.Name, colors[colorIndex])
-			colorIndex++
-			if colorIndex >= len(colors) {
-				colorIndex = 0
-			}
+		}
+		colorIndex++
+		if colorIndex >= len(colors) {
+			colorIndex = 0
 		}
 	}
 	dotData += "}"
