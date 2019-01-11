@@ -274,6 +274,28 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 			output.Fatal(err)
 		}
 		output.OK("Saved to", filename)
+	case "graph-migration":
+		if len(args) == 0 {
+			output.Fatal("Please provide NAME")
+		}
+		output.Info1("Graph plan for", args[0])
+
+		var filename = args[0] + ".png"
+
+		upMigrations, err := manager.GetUpPlanForName(args[0])
+		if err != nil {
+			output.Fatal(err)
+		}
+		if !output.CheckGraphviz() {
+			output.Fatal("Graphviz not found. Please install it.")
+		}
+		if len(args) >= 2 {
+			filename = args[1]
+		}
+		if err := output.GraphPng(upMigrations, filename); err != nil {
+			output.Fatal(err)
+		}
+		output.OK("Saved to", filename)
 	default:
 		output.Fatalf("%q: no such command", command)
 	}

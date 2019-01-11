@@ -9,6 +9,23 @@ import (
 	"github.com/bfg-dev/pig/migration"
 )
 
+var (
+	colors = []string{
+		"#8B0000",
+		"#C71585",
+		"#FF4500",
+		"#FF8C00",
+		"#FFD700",
+		"#BDB76B",
+		"#800080",
+		"#4B0082",
+		"#006400",
+		"#808000",
+		"#008B8B",
+		"#0000FF",
+	}
+)
+
 // CheckGraphviz - check if graphviz exists
 func CheckGraphviz() bool {
 	cmd := exec.Command("dot", "-V")
@@ -22,13 +39,18 @@ func CheckGraphviz() bool {
 func GraphPng(migs *migration.Migrations, filename string) error {
 
 	var (
-		dotData string
+		dotData    string
+		colorIndex int
 	)
 
 	dotData = "digraph D {"
 	for _, item := range migs.Items {
 		for _, req := range item.Requirements {
-			dotData += fmt.Sprintf("\"%v\" -> \"%v\"\n", item.Name, req.Name)
+			dotData += fmt.Sprintf("\"%v\" -> \"%v\" [color=\"%v\"];\n", item.Name, req.Name, colors[colorIndex])
+			colorIndex++
+			if colorIndex >= len(colors) {
+				colorIndex = 0
+			}
 		}
 	}
 	dotData += "}"
