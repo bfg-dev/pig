@@ -256,6 +256,24 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 			output.Fatal(err)
 		}
 		output.PrintHistory(history)
+	case "graph":
+		var filename = "output.png"
+
+		output.Info1("Graph")
+		allMigrations, err := manager.GetAllMigrations()
+		if err != nil {
+			output.Fatal(err)
+		}
+		if !output.CheckGraphviz() {
+			output.Fatal("Graphviz not found. Please install it.")
+		}
+		if len(args) != 0 {
+			filename = args[0]
+		}
+		if err := output.GraphPng(allMigrations, filename); err != nil {
+			output.Fatal(err)
+		}
+		output.OK("Saved to", filename)
 	default:
 		output.Fatalf("%q: no such command", command)
 	}
