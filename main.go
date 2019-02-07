@@ -44,10 +44,10 @@ Commands:
     down-note NOTE                  Roll back a specific NOTE
     reset                           Roll back all migrations
     status                          Dump the migration status
-    history							            Show migration history
-    history-migration NAME	        Show history for a specific NAME
+    history                         Show migration history
+    history-migration NAME          Show history for a specific NAME
     history-gitinfo GITINFO         Show history for a specific GITINFO
-    history-note NOTE	              Show history for a specific NOTE
+    history-note NOTE               Show history for a specific NOTE
     graph [pngname]                 Draw png graph. (default pngname is output.png)
     graph-migration NAME [pngname]  Draw png graph for specific NAME (default pngname is NAME.png)
 `
