@@ -11,13 +11,6 @@ import (
 	"github.com/olekukonko/tablewriter"
 )
 
-func stringPointerToString(str *string) string {
-	if str == nil {
-		return ""
-	}
-	return *str
-}
-
 // PrintSmallDBTable - print small table
 func PrintSmallDBTable(records []*db.RecShort) {
 	table := tablewriter.NewWriter(os.Stdout)
@@ -109,71 +102,40 @@ func PrintFullFileTable(records []*file.RecFull) {
 }
 
 // PrintMigrations - print small table
-func PrintMigrations(records *migration.Migrations, hideFilename bool) {
+func PrintMigrationsTable(records *migration.Migrations) {
 	table := tablewriter.NewWriter(os.Stdout)
 	// table.SetRowLine(true)
-	if hideFilename {
-		table.SetHeader([]string{"ID", "Timestamp", "Name", "Requirements", "Is applied", "Pending"})
+	table.SetHeader([]string{"ID", "Timestamp", "Name", "Filename", "Requirements", "Is applied", "Pending"})
 
-		table.SetHeaderColor(
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-		)
+	table.SetHeaderColor(
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+	)
 
-		table.SetHeaderColor(
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-		)
+	table.SetHeaderColor(
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+		tablewriter.Colors{tablewriter.Bold},
+	)
 
-		table.SetColumnColor(
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{},
-			tablewriter.Colors{tablewriter.FgHiBlueColor},
-			tablewriter.Colors{tablewriter.FgCyanColor},
-			tablewriter.Colors{tablewriter.FgYellowColor},
-			tablewriter.Colors{tablewriter.FgRedColor},
-		)
-	} else {
-		table.SetHeader([]string{"ID", "Timestamp", "Name", "Filename", "Requirements", "Is applied", "Pending"})
-
-		table.SetHeaderColor(
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-		)
-
-		table.SetHeaderColor(
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-			tablewriter.Colors{tablewriter.Bold},
-		)
-
-		table.SetColumnColor(
-			tablewriter.Colors{tablewriter.FgHiBlackColor},
-			tablewriter.Colors{},
-			tablewriter.Colors{tablewriter.FgHiBlueColor},
-			tablewriter.Colors{},
-			tablewriter.Colors{tablewriter.FgCyanColor},
-			tablewriter.Colors{tablewriter.FgYellowColor},
-			tablewriter.Colors{tablewriter.FgRedColor},
-		)
-	}
+	table.SetColumnColor(
+		tablewriter.Colors{tablewriter.FgHiBlackColor},
+		tablewriter.Colors{},
+		tablewriter.Colors{tablewriter.FgHiBlueColor},
+		tablewriter.Colors{},
+		tablewriter.Colors{tablewriter.FgCyanColor},
+		tablewriter.Colors{tablewriter.FgYellowColor},
+		tablewriter.Colors{tablewriter.FgRedColor},
+	)
 
 	for _, record := range records.Items {
 		recordID := "?"
@@ -186,32 +148,21 @@ func PrintMigrations(records *migration.Migrations, hideFilename bool) {
 			recordRequirements = append(recordRequirements, req.Name)
 		}
 
-		if hideFilename {
-			table.Append([]string{
-				recordID,
-				record.TStamp.Format("2006-01-02 15:04:05"),
-				record.Name,
-				strings.Join(recordRequirements, ", "),
-				fmt.Sprintf("%v", record.Applied),
-				fmt.Sprintf("%v", record.Pending),
-			})
-		} else {
-			table.Append([]string{
-				recordID,
-				record.TStamp.Format("2006-01-02 15:04:05"),
-				record.Name,
-				record.Filename,
-				strings.Join(recordRequirements, ", "),
-				fmt.Sprintf("%v", record.Applied),
-				fmt.Sprintf("%v", record.Pending),
-			})
-		}
+		table.Append([]string{
+			recordID,
+			record.TStamp.Format("2006-01-02 15:04:05"),
+			record.Name,
+			record.Filename,
+			strings.Join(recordRequirements, ", "),
+			fmt.Sprintf("%v", record.Applied),
+			fmt.Sprintf("%v", record.Pending),
+		})
 	}
 	table.Render() // Send output
 }
 
-// PrintHistory - print history
-func PrintHistory(records []*db.RecHistory) {
+// PrintHistoryTable - print history
+func PrintHistoryTable(records []*db.RecHistory) {
 	table := tablewriter.NewWriter(os.Stdout)
 	applied := ""
 

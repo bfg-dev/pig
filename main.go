@@ -16,12 +16,12 @@ import (
 )
 
 var (
-	flags        = flag.NewFlagSet("pig", flag.ExitOnError)
-	dir          = flags.String("dir", ".", "directory with migration files")
-	note         = flags.String("note", "", "custom note for migrations")
-	gitinfo      = flags.String("gitinfo", "", "custom git information (branch or tag) for migrations")
-	onlyPlan     = flags.Bool("only-plan", false, "show migration plan")
-	hideFilename = flags.Bool("hide-filename", false, "Hide filename in output tables")
+	flags    = flag.NewFlagSet("pig", flag.ExitOnError)
+	dir      = flags.String("dir", ".", "directory with migration files")
+	note     = flags.String("note", "", "custom note for migrations")
+	gitinfo  = flags.String("gitinfo", "", "custom git information (branch or tag) for migrations")
+	onlyPlan = flags.Bool("only-plan", false, "show migration plan")
+	listView = flags.Bool("list-view", false, "Use 'list' insteed of 'table' view")
 )
 
 var (
@@ -47,9 +47,9 @@ Commands:
     history							            Show migration history
     history-migration NAME	        Show history for a specific NAME
     history-gitinfo GITINFO         Show history for a specific GITINFO
-		history-note NOTE	              Show history for a specific NOTE
-		graph [pngname]                 Draw png graph. (default pngname is output.png)
-		graph-migration NAME [pngname]  Draw png graph for specific NAME (default pngname is NAME.png)
+    history-note NOTE	              Show history for a specific NOTE
+    graph [pngname]                 Draw png graph. (default pngname is output.png)
+    graph-migration NAME [pngname]  Draw png graph for specific NAME (default pngname is NAME.png)
 `
 )
 
@@ -116,7 +116,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(upMigrations, *hideFilename)
+		if *listView {
+			output.PrintMigrationsStructs(upMigrations)
+		} else {
+			output.PrintMigrationsTable(upMigrations)
+		}
 		if !onlyPlan {
 			upAndDown(manager.ExecuteUp, upMigrations, note, gitinfo)
 		}
@@ -129,7 +133,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(upMigrations, *hideFilename)
+		if *listView {
+			output.PrintMigrationsStructs(upMigrations)
+		} else {
+			output.PrintMigrationsTable(upMigrations)
+		}
 		if !onlyPlan {
 			upAndDown(manager.ExecuteUp, upMigrations, note, gitinfo)
 		}
@@ -142,7 +150,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(upMigrations, *hideFilename)
+		if *listView {
+			output.PrintMigrationsStructs(upMigrations)
+		} else {
+			output.PrintMigrationsTable(upMigrations)
+		}
 		if !onlyPlan {
 			upAndDown(manager.ExecuteUp, upMigrations, note, gitinfo)
 		}
@@ -155,7 +167,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(upMigrations, *hideFilename)
+		if *listView {
+			output.PrintMigrationsStructs(upMigrations)
+		} else {
+			output.PrintMigrationsTable(upMigrations)
+		}
 		if !onlyPlan {
 			upAndDown(manager.ExecuteUp, upMigrations, note, gitinfo)
 		}
@@ -168,7 +184,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(downMigrations, *hideFilename)
+		if *listView {
+			output.PrintMigrationsStructs(downMigrations)
+		} else {
+			output.PrintMigrationsTable(downMigrations)
+		}
 		if !onlyPlan {
 			upAndDown(manager.ExecuteDown, downMigrations, note, gitinfo)
 		}
@@ -181,7 +201,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(downMigrations, *hideFilename)
+		if *listView {
+			output.PrintMigrationsStructs(downMigrations)
+		} else {
+			output.PrintMigrationsTable(downMigrations)
+		}
 		if !onlyPlan {
 			upAndDown(manager.ExecuteDown, downMigrations, note, gitinfo)
 		}
@@ -194,7 +218,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(downMigrations, *hideFilename)
+		if *listView {
+			output.PrintMigrationsStructs(downMigrations)
+		} else {
+			output.PrintMigrationsTable(downMigrations)
+		}
 		if !onlyPlan {
 			upAndDown(manager.ExecuteDown, downMigrations, note, gitinfo)
 		}
@@ -204,7 +232,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(downMigrations, *hideFilename)
+		if *listView {
+			output.PrintMigrationsStructs(downMigrations)
+		} else {
+			output.PrintMigrationsTable(downMigrations)
+		}
 		if !onlyPlan {
 			upAndDown(manager.ExecuteDown, downMigrations, note, gitinfo)
 		}
@@ -214,7 +246,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintMigrations(allMigrations, *hideFilename)
+		if *listView {
+			output.PrintMigrationsStructs(allMigrations)
+		} else {
+			output.PrintMigrationsTable(allMigrations)
+		}
 	case "init":
 		output.Info2("Initiating database")
 		if err := manager.InitDB(); err != nil {
@@ -227,7 +263,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintHistory(history)
+		if *listView {
+			output.PrintHistoryStructs(history)
+		} else {
+			output.PrintHistoryTable(history)
+		}
 	case "history-migration":
 		if len(args) == 0 {
 			output.Fatal("Please provide NAME")
@@ -237,7 +277,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintHistory(history)
+		if *listView {
+			output.PrintHistoryStructs(history)
+		} else {
+			output.PrintHistoryTable(history)
+		}
 	case "history-gitinfo":
 		if len(args) == 0 {
 			output.Fatal("Please provide GITINFO")
@@ -247,7 +291,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintHistory(history)
+		if *listView {
+			output.PrintHistoryStructs(history)
+		} else {
+			output.PrintHistoryTable(history)
+		}
 	case "history-note":
 		if len(args) == 0 {
 			output.Fatal("Please provide NOTE")
@@ -257,7 +305,11 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		output.PrintHistory(history)
+		if *listView {
+			output.PrintHistoryStructs(history)
+		} else {
+			output.PrintHistoryTable(history)
+		}
 	case "graph":
 		var filename = "output.png"
 
