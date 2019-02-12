@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/bfg-dev/pig/db"
 	"github.com/bfg-dev/pig/migration"
 	"github.com/bfg-dev/pig/output"
 	_ "github.com/lib/pq"
@@ -108,6 +109,22 @@ func upAndDown(f func(*migration.Meta) error, migrations *migration.Migrations, 
 	output.OK("All migrations executed")
 }
 
+func printMigrations(migs *migration.Migrations) {
+	if *listView {
+		output.PrintMigrationsStructs(migs)
+	} else {
+		output.PrintMigrationsTable(migs)
+	}
+}
+
+func printHistory(history []*db.RecHistory) {
+	if *listView {
+		output.PrintHistoryStructs(history)
+	} else {
+		output.PrintHistoryTable(history)
+	}
+}
+
 func run(command string, manager *migration.Manager, note, gitinfo string, onlyPlan bool, args []string) {
 	switch command {
 	case "up":
@@ -116,11 +133,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintMigrationsStructs(upMigrations)
-		} else {
-			output.PrintMigrationsTable(upMigrations)
-		}
+		printMigrations(upMigrations)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteUp, upMigrations, note, gitinfo)
 		}
@@ -133,11 +146,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintMigrationsStructs(upMigrations)
-		} else {
-			output.PrintMigrationsTable(upMigrations)
-		}
+		printMigrations(upMigrations)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteUp, upMigrations, note, gitinfo)
 		}
@@ -150,11 +159,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintMigrationsStructs(upMigrations)
-		} else {
-			output.PrintMigrationsTable(upMigrations)
-		}
+		printMigrations(upMigrations)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteUp, upMigrations, note, gitinfo)
 		}
@@ -167,11 +172,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintMigrationsStructs(upMigrations)
-		} else {
-			output.PrintMigrationsTable(upMigrations)
-		}
+		printMigrations(upMigrations)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteUp, upMigrations, note, gitinfo)
 		}
@@ -184,11 +185,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintMigrationsStructs(downMigrations)
-		} else {
-			output.PrintMigrationsTable(downMigrations)
-		}
+		printMigrations(downMigrations)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteDown, downMigrations, note, gitinfo)
 		}
@@ -201,11 +198,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintMigrationsStructs(downMigrations)
-		} else {
-			output.PrintMigrationsTable(downMigrations)
-		}
+		printMigrations(downMigrations)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteDown, downMigrations, note, gitinfo)
 		}
@@ -218,11 +211,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintMigrationsStructs(downMigrations)
-		} else {
-			output.PrintMigrationsTable(downMigrations)
-		}
+		printMigrations(downMigrations)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteDown, downMigrations, note, gitinfo)
 		}
@@ -232,11 +221,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintMigrationsStructs(downMigrations)
-		} else {
-			output.PrintMigrationsTable(downMigrations)
-		}
+		printMigrations(downMigrations)
 		if !onlyPlan {
 			upAndDown(manager.ExecuteDown, downMigrations, note, gitinfo)
 		}
@@ -246,11 +231,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintMigrationsStructs(allMigrations)
-		} else {
-			output.PrintMigrationsTable(allMigrations)
-		}
+		printMigrations(allMigrations)
 	case "init":
 		output.Info2("Initiating database")
 		if err := manager.InitDB(); err != nil {
@@ -263,11 +244,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintHistoryStructs(history)
-		} else {
-			output.PrintHistoryTable(history)
-		}
+		printHistory(history)
 	case "history-migration":
 		if len(args) == 0 {
 			output.Fatal("Please provide NAME")
@@ -277,11 +254,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintHistoryStructs(history)
-		} else {
-			output.PrintHistoryTable(history)
-		}
+		printHistory(history)
 	case "history-gitinfo":
 		if len(args) == 0 {
 			output.Fatal("Please provide GITINFO")
@@ -291,11 +264,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintHistoryStructs(history)
-		} else {
-			output.PrintHistoryTable(history)
-		}
+		printHistory(history)
 	case "history-note":
 		if len(args) == 0 {
 			output.Fatal("Please provide NOTE")
@@ -305,11 +274,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		if err != nil {
 			output.Fatal(err)
 		}
-		if *listView {
-			output.PrintHistoryStructs(history)
-		} else {
-			output.PrintHistoryTable(history)
-		}
+		printHistory(history)
 	case "graph":
 		var filename = "output.png"
 
