@@ -29,7 +29,7 @@ var (
 	usagePrefix = `Usage: pig [OPTIONS] DBSTRING COMMAND
 
 Example:
-	pig postgres "user=postgres dbname=postgres sslmode=disable" status
+	pig "user=postgres dbname=postgres sslmode=disable" status
 Options:
 `
 
