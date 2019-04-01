@@ -33,7 +33,7 @@ AddAgeToUsers.sql
 ```sql
 
 -- +pig Name: Add age to users table
--- +pig Requiremets: Create users
+-- +pig Requirements: Create users
 -- +pig Up
 ALTER TABLE users ADD COLUMN age INTEGER;
 
@@ -64,7 +64,7 @@ AddCostToGoods.sql
 ```sql
 
 -- +pig Name: Add cost to goods table
--- +pig Requiremets: Create goods
+-- +pig Requirements: Create goods
 -- +pig Up
 ALTER TABLE goods ADD COLUMN cost INTEGER;
 
@@ -78,7 +78,7 @@ Purchases.sql
 ```sql
 
 -- +pig Name: Create purchases
--- +pig Requiremets: Create users, Create goods
+-- +pig Requirements: Create users, Create goods
 -- +pig Up
 CREATE TABLE purchases (
     "id" serial,
@@ -319,7 +319,7 @@ Write your SQL queries in files with any name and extension ".sql"
 Text must/may contain some notations:
 
 * ```-- +pig Name: <Any name>``` : (optional) name of migration. Defaults to file name without extension. This name used in requirements notations.
-* ```-- +pig Requiremets: <Requirement 1>, <Requirement 2>``` : (optional) comma separated requirements list
+* ```-- +pig Requirements: <Requirement 1>, <Requirement 2>``` : (optional) comma separated requirements list
 * ```-- +pig Up``` : starts "UP" block of migration
 * ```-- +pig Down``` : starts "DOWN" block of migration
 * ```-- +pig StatementBegin``` : starts block with "complex" sql code

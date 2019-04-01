@@ -74,8 +74,8 @@ func (m *RecManager) parseFile(rec *RecFull) error {
 				}
 			}
 
-			if strings.HasPrefix(option, optRequiremetsPrefix) {
-				for _, req := range strings.Split(strings.TrimSpace(option[len(optRequiremetsPrefix):]), ",") {
+			if strings.HasPrefix(option, optRequirementsPrefix) {
+				for _, req := range strings.Split(strings.TrimSpace(option[len(optRequirementsPrefix):]), ",") {
 					rec.Requirements = append(rec.Requirements, strings.TrimSpace(req))
 				}
 			}

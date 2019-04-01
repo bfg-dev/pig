@@ -1,5 +1,5 @@
 -- +pig Name: Create purchases
--- +pig Requiremets: Create users, Create goods
+-- +pig Requirements: Create users, Create goods
 -- +pig Up
 CREATE TABLE purchases (
     "id" serial,

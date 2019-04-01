@@ -1,5 +1,5 @@
 -- +pig Name: Add cost to goods table
--- +pig Requiremets: Create goods
+-- +pig Requirements: Create goods
 -- +pig Up
 ALTER TABLE goods ADD COLUMN cost INTEGER;
 
