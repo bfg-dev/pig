@@ -15,6 +15,10 @@ var (
 	hiblue  = color.New(color.FgHiBlue).SprintFunc()
 )
 
+func init() {
+  color.NoColor = false
+}
+
 func stringPointerToString(str *string) string {
 	if str == nil {
 		return ""
