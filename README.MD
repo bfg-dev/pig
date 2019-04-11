@@ -352,3 +352,4 @@ Text must/may contain some notations:
 * **history-note NOTE** Show history for a specific NOTE
 * **graph [pngname]** Draw png graph. (default pngname is output.png)
 * **graph-migration NAME [pngname]** Draw png graph for specific NAME (default pngname is NAME.png)
+* **generate NAME** Generate sql template

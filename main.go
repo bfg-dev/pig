@@ -11,6 +11,7 @@ import (
 	"os"
 
 	"github.com/bfg-dev/pig/db"
+	"github.com/bfg-dev/pig/file"
 	"github.com/bfg-dev/pig/migration"
 	"github.com/bfg-dev/pig/output"
 	_ "github.com/lib/pq"
@@ -50,7 +51,8 @@ Commands:
     history-gitinfo GITINFO         Show history for a specific GITINFO
     history-note NOTE               Show history for a specific NOTE
     graph [pngname]                 Draw png graph. (default pngname is output.png)
-    graph-migration NAME [pngname]  Draw png graph for specific NAME (default pngname is NAME.png)
+		graph-migration NAME [pngname]  Draw png graph for specific NAME (default pngname is NAME.png)
+		generate NAME                   Generate sql template
 `
 )
 
@@ -67,6 +69,19 @@ func main() {
 
 	if args[0] == "-h" || args[0] == "--help" {
 		flags.Usage()
+		return
+	}
+
+	if args[0] == "generate" {
+		if len(args[1]) == 0 {
+			output.Fatal("Please provide NAME")
+		}
+		output.Info1("Generating file", args[1])
+		err := file.GenerateNewSQLFile(dir, args[1])
+		if err != nil {
+			output.Fatal(err)
+		}
+		output.OK("File generated", args[1])
 		return
 	}
 
