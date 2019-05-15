@@ -127,6 +127,16 @@ func (m *RecManager) FindByFilenameFull(records []*RecFull, filename string) *Re
 	return nil
 }
 
+// FindByNameFull - find by name in array
+func (m *RecManager) FindByNameFull(records []*RecFull, name string) *RecFull {
+	for _, rec := range records {
+		if rec.Name == name {
+			return rec
+		}
+	}
+	return nil
+}
+
 // RemoveFromListFull - remove item from short list
 func (m *RecManager) RemoveFromListFull(records []*RecFull, removeItem *RecFull) []*RecFull {
 	var result []*RecFull

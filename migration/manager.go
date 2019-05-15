@@ -2,6 +2,7 @@ package migration
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	"github.com/bfg-dev/pig/db"
@@ -120,6 +121,28 @@ func (o *Manager) loadRawMigrations() (*Migrations, error) {
 		result.Items = append(result.Items, metaItem)
 	}
 
+	// 7: Check for name collisions
+	for i1, resultRec1 := range result.Items {
+		for i2, resultRec2 := range result.Items {
+			if i1 != i2 && resultRec1.Name == resultRec2.Name {
+				errorString := fmt.Sprintf("found name collision '%v':", resultRec1.Name)
+				if resultRec1.DBShortRec != nil {
+					errorString = fmt.Sprintf("%v with filename in db '%v';", errorString, resultRec1.DBShortRec.Filename)
+				}
+				if resultRec2.DBShortRec != nil {
+					errorString = fmt.Sprintf("%v with filename in db '%v';", errorString, resultRec2.DBShortRec.Filename)
+				}
+				if resultRec1.FileFullRec != nil {
+					errorString = fmt.Sprintf("%v with filename in fs '%v';", errorString, resultRec1.FileFullRec.Filename)
+				}
+				if resultRec2.FileFullRec != nil {
+					errorString = fmt.Sprintf("%v with filename in fs '%v';", errorString, resultRec2.FileFullRec.Filename)
+				}
+
+				return nil, fmt.Errorf(errorString)
+			}
+		}
+	}
 	return &result, nil
 }
 
