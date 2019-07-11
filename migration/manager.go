@@ -197,6 +197,24 @@ func (o *Manager) GetAllMigrations() (*Migrations, error) {
 	return migs, nil
 }
 
+// GetAppliedMigrations - get only applied migrations
+func (o *Manager) GetAppliedMigrations() (*Migrations, error) {
+	all, err := o.GetAllMigrations()
+	if err != nil {
+		return nil, err
+	}
+
+	ans := Migrations{}
+
+	for _, item := range all.Items {
+		if item.Applied {
+			ans.Items = append(ans.Items, item)
+		}
+	}
+
+	return &ans, nil
+}
+
 // GetUpPlan - get UP plan for all pending migraions
 func (o *Manager) GetUpPlan() (*Migrations, error) {
 	var result Migrations

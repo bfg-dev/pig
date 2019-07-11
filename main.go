@@ -294,7 +294,7 @@ func run(command string, manager *migration.Manager, note, gitinfo string, onlyP
 		var filename = "output.png"
 
 		output.Info1("Graph")
-		allMigrations, err := manager.GetAllMigrations()
+		allMigrations, err := manager.GetAppliedMigrations()
 		if err != nil {
 			output.Fatal(err)
 		}

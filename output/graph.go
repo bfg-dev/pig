@@ -48,6 +48,9 @@ func GraphPng(migs *migration.Migrations, filename string) error {
 		for _, req := range item.Requirements {
 			dotData += fmt.Sprintf("\"%v\" -> \"%v\" [color=\"%v\"];\n", item.Name, req.Name, colors[colorIndex])
 		}
+		if len(item.Requirements) == 0 {
+			dotData += fmt.Sprintf("\"%v\" [color=\"%v\"];\n", item.Name, colors[colorIndex])
+		}
 		colorIndex++
 		if colorIndex >= len(colors) {
 			colorIndex = 0
