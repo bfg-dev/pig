@@ -101,7 +101,7 @@ func PrintFullFileTable(records []*file.RecFull) {
 	table.Render() // Send output
 }
 
-// PrintMigrations - print small table
+// PrintMigrationsTable - print small table
 func PrintMigrationsTable(records *migration.Migrations) {
 	table := tablewriter.NewWriter(os.Stdout)
 	// table.SetRowLine(true)
