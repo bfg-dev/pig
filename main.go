@@ -5,16 +5,17 @@ package main
 //
 
 import (
-	"database/sql"
+	"context"
 	"flag"
 	"log"
 	"os"
 
-	"github.com/bfg-dev/pig/db"
-	"github.com/bfg-dev/pig/file"
-	"github.com/bfg-dev/pig/migration"
-	"github.com/bfg-dev/pig/output"
-	_ "github.com/lib/pq"
+	"pig/db"
+	"pig/file"
+	"pig/migration"
+	"pig/output"
+
+	pgx "github.com/jackc/pgx/v4"
 )
 
 var (
@@ -87,7 +88,7 @@ func main() {
 
 	dbstring, command := args[0], args[1]
 
-	db, err := sql.Open("postgres", dbstring)
+	db, err := pgx.Connect(context.Background(), dbstring)
 	if err != nil {
 		output.Fatalf("-dbstring=%q: %v", dbstring, err)
 	}

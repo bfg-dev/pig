@@ -1,21 +1,21 @@
 package db
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
 
-	"github.com/lib/pq"
+	pgx "github.com/jackc/pgx/v4"
 )
 
 // RecManager - record manager
 type RecManager struct {
-	db               *sql.DB
+	db               *pgx.Conn
 	tableName        string
 	historyTableName string
 }
 
 // NewRecManager - creates new DBRecManager
-func NewRecManager(db *sql.DB, tableName, historyTableName string) *RecManager {
+func NewRecManager(db *pgx.Conn, tableName, historyTableName string) *RecManager {
 	return &RecManager{
 		db:               db,
 		tableName:        tableName,
@@ -25,37 +25,37 @@ func NewRecManager(db *sql.DB, tableName, historyTableName string) *RecManager {
 
 // CreateTable - create migration table
 func (m *RecManager) CreateTable() error {
-	tx, err := m.db.Begin()
+	tx, err := m.db.Begin(context.Background())
 	if err != nil {
 		return err
 	}
 
 	query := fmt.Sprintf(sqlCreateTable, m.tableName)
 
-	if _, err := tx.Exec(query); err != nil {
-		tx.Rollback()
+	if _, err := tx.Exec(context.Background(), query); err != nil {
+		tx.Rollback(context.Background())
 		return err
 	}
 
-	tx.Commit()
+	tx.Commit(context.Background())
 	return nil
 }
 
 // CreateHistoryTable - create migration table
 func (m *RecManager) CreateHistoryTable() error {
-	tx, err := m.db.Begin()
+	tx, err := m.db.Begin(context.Background())
 	if err != nil {
 		return err
 	}
 
 	query := fmt.Sprintf(sqlCreateHistoryTable, m.historyTableName)
 
-	if _, err := tx.Exec(query); err != nil {
-		tx.Rollback()
+	if _, err := tx.Exec(context.Background(), query); err != nil {
+		tx.Rollback(context.Background())
 		return err
 	}
 
-	tx.Commit()
+	tx.Commit(context.Background())
 	return nil
 }
 
@@ -64,7 +64,7 @@ func (m *RecManager) getShort(where string) ([]*RecShort, error) {
 
 	query := fmt.Sprintf(sqlSelectShort, m.tableName, where)
 
-	rows, err := m.db.Query(query)
+	rows, err := m.db.Query(context.Background(), query)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func (m *RecManager) getShort(where string) ([]*RecShort, error) {
 			&row.GITinfo,
 			&row.Filename,
 			&row.TStamp,
-			(*pq.StringArray)(&row.Requirements),
+			&row.Requirements,
 		)
 		if err != nil {
 			return nil, err
@@ -96,7 +96,7 @@ func (m *RecManager) getFull(where string) ([]*RecFull, error) {
 
 	query := fmt.Sprintf(sqlSelectFull, m.tableName, where)
 
-	rows, err := m.db.Query(query)
+	rows, err := m.db.Query(context.Background(), query)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ func (m *RecManager) getFull(where string) ([]*RecFull, error) {
 			&row.GITinfo,
 			&row.Filename,
 			&row.TStamp,
-			(*pq.StringArray)(&row.Requirements),
+			&row.Requirements,
 			&row.SQLData,
 		)
 		if err != nil {
@@ -161,7 +161,7 @@ func (m *RecManager) getHistory(where string) ([]*RecHistory, error) {
 
 	query := fmt.Sprintf(sqlSelectHistory, m.tableName, m.historyTableName, where)
 
-	rows, err := m.db.Query(query)
+	rows, err := m.db.Query(context.Background(), query)
 	if err != nil {
 		return nil, err
 	}
@@ -218,7 +218,7 @@ func (m *RecManager) FindByFilenameShort(records []*RecShort, filename string) *
 }
 
 // InsertRecords - insert new record (only full)
-func (m *RecManager) InsertRecords(records []*RecFull, tx *sql.Tx) error {
+func (m *RecManager) InsertRecords(records []*RecFull, tx pgx.Tx) error {
 	var (
 		id uint64
 	)
@@ -228,6 +228,7 @@ func (m *RecManager) InsertRecords(records []*RecFull, tx *sql.Tx) error {
 	for _, record := range records {
 
 		err := tx.QueryRow(
+			context.Background(),
 			query,
 			record.Name,
 			record.Applied,
@@ -235,7 +236,7 @@ func (m *RecManager) InsertRecords(records []*RecFull, tx *sql.Tx) error {
 			record.GITinfo,
 			record.Filename,
 			record.TStamp,
-			(pq.StringArray)(record.Requirements),
+			record.Requirements,
 			record.SQLData,
 		).Scan(&id)
 
@@ -244,6 +245,7 @@ func (m *RecManager) InsertRecords(records []*RecFull, tx *sql.Tx) error {
 		}
 
 		_, err = tx.Exec(
+			context.Background(),
 			historyQuery,
 			id,
 			record.Applied,
@@ -258,12 +260,13 @@ func (m *RecManager) InsertRecords(records []*RecFull, tx *sql.Tx) error {
 }
 
 // UpdateRecords - insert new record (only full)
-func (m *RecManager) UpdateRecords(records []*RecFull, tx *sql.Tx) error {
+func (m *RecManager) UpdateRecords(records []*RecFull, tx pgx.Tx) error {
 	historyQuery := fmt.Sprintf(sqlInsertHistory, m.historyTableName)
 
 	for _, record := range records {
 		query := fmt.Sprintf(sqlUpdate, m.tableName, record.ID)
 		_, err := tx.Exec(
+			context.Background(),
 			query,
 			record.Name,
 			record.Applied,
@@ -271,13 +274,14 @@ func (m *RecManager) UpdateRecords(records []*RecFull, tx *sql.Tx) error {
 			record.GITinfo,
 			record.Filename,
 			record.TStamp,
-			(pq.StringArray)(record.Requirements),
+			record.Requirements,
 			record.SQLData,
 		)
 		if err != nil {
 			return err
 		}
 		_, err = tx.Exec(
+			context.Background(),
 			historyQuery,
 			record.ID,
 			record.Applied,

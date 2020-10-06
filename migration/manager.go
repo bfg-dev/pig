@@ -1,17 +1,19 @@
 package migration
 
 import (
-	"database/sql"
+	"context"
 	"fmt"
 	"log"
 
-	"github.com/bfg-dev/pig/db"
-	"github.com/bfg-dev/pig/file"
+	"pig/db"
+	"pig/file"
+
+	pgx "github.com/jackc/pgx/v4"
 )
 
 // Manager - operation manager
 type Manager struct {
-	dbconnection *sql.DB
+	dbconnection *pgx.Conn
 	dbmanager    *db.RecManager
 	filemanager  *file.RecManager
 }
@@ -24,7 +26,7 @@ func stringPointerToString(str *string) string {
 }
 
 // NewManager - returns new OpManager
-func NewManager(dbconnection *sql.DB, tableName, historyTableName, directory string) *Manager {
+func NewManager(dbconnection *pgx.Conn, tableName, historyTableName, directory string) *Manager {
 	return &Manager{
 		dbconnection: dbconnection,
 		dbmanager:    db.NewRecManager(dbconnection, tableName, historyTableName),
@@ -384,7 +386,7 @@ func (o *Manager) ExecuteDown(migrationMeta *Meta) error {
 	return o.executeMigration(migrationMeta, false)
 }
 
-func (o *Manager) updateMigrationTable(migrationMeta *Meta, up bool, tx *sql.Tx) error {
+func (o *Manager) updateMigrationTable(migrationMeta *Meta, up bool, tx pgx.Tx) error {
 	if up {
 		newDBFullRec := db.RecFull{
 			RecShort: db.RecShort{
@@ -430,42 +432,42 @@ func (o *Manager) executeMigration(migrationMeta *Meta, up bool) error {
 	if statements.Transactional {
 		// TRANSACTION.
 
-		tx, err := o.dbconnection.Begin()
+		tx, err := o.dbconnection.Begin(context.Background())
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		for _, query := range statements.Lines {
-			if _, err = tx.Exec(query); err != nil {
-				tx.Rollback()
+			if _, err = tx.Exec(context.Background(), query); err != nil {
+				tx.Rollback(context.Background())
 				return err
 			}
 		}
 
 		if err := o.updateMigrationTable(migrationMeta, up, tx); err != nil {
-			tx.Rollback()
+			tx.Rollback(context.Background())
 			return err
 		}
 
-		return tx.Commit()
+		return tx.Commit(context.Background())
 	}
 
 	// NO TRANSACTION.
 	for _, query := range statements.Lines {
-		if _, err := o.dbconnection.Exec(query); err != nil {
+		if _, err := o.dbconnection.Exec(context.Background(), query); err != nil {
 			return err
 		}
 	}
 
-	tx, err := o.dbconnection.Begin()
+	tx, err := o.dbconnection.Begin(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	if err := o.updateMigrationTable(migrationMeta, up, tx); err != nil {
-		tx.Rollback()
+		tx.Rollback(context.Background())
 		return err
 	}
 
-	return tx.Commit()
+	return tx.Commit(context.Background())
 }

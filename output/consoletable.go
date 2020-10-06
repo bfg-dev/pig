@@ -5,9 +5,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/bfg-dev/pig/db"
-	"github.com/bfg-dev/pig/file"
-	"github.com/bfg-dev/pig/migration"
+	"pig/db"
+	"pig/file"
+	"pig/migration"
+
 	"github.com/olekukonko/tablewriter"
 )
 
