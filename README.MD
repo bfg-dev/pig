@@ -2,7 +2,9 @@
 
 ## Install
 
-```$ go get -u github.com/bfg-dev/pig```
+```bash
+GO111MODULE=off go get -u github.com/bfg-dev/pig
+```
 
 ## Examples
 
