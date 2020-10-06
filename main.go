@@ -10,10 +10,10 @@ import (
 	"log"
 	"os"
 
-	"pig/db"
-	"pig/file"
-	"pig/migration"
-	"pig/output"
+	"github.com/bfg-dev/pig/db"
+	"github.com/bfg-dev/pig/file"
+	"github.com/bfg-dev/pig/migration"
+	"github.com/bfg-dev/pig/output"
 
 	pgx "github.com/jackc/pgx/v4"
 )

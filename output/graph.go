@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"pig/migration"
+	"github.com/bfg-dev/pig/migration"
 )
 
 var (

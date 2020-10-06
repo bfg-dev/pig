@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"pig/db"
-	"pig/migration"
+	"github.com/bfg-dev/pig/db"
+	"github.com/bfg-dev/pig/migration"
 )
 
 // PrintHistoryStructs - print history

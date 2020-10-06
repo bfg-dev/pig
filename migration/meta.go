@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"pig/db"
-	"pig/file"
+	"github.com/bfg-dev/pig/db"
+	"github.com/bfg-dev/pig/file"
 )
 
 // Meta migration metadata

@@ -1,4 +1,4 @@
-module pig
+module github.com/bfg-dev/pig
 
 go 1.15
 

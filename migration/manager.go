@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"pig/db"
-	"pig/file"
+	"github.com/bfg-dev/pig/db"
+	"github.com/bfg-dev/pig/file"
 
 	pgx "github.com/jackc/pgx/v4"
 )
