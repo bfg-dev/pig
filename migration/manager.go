@@ -11,6 +11,10 @@ import (
 	pgx "github.com/jackc/pgx/v4"
 )
 
+const (
+	pig_lock_id = 0x7069670000000000 // pig00000
+)
+
 // Manager - operation manager
 type Manager struct {
 	dbconnection *pgx.Conn
@@ -359,6 +363,16 @@ func (o *Manager) GetHistoryForGITinfo(gitinfo string) ([]*db.RecHistory, error)
 // GetHistoryForNote - get history for migration
 func (o *Manager) GetHistoryForNote(note string) ([]*db.RecHistory, error) {
 	return o.dbmanager.GetHistoryForNote(note)
+}
+
+// GetDBGlobalLock - get global lock in PG
+func (o *Manager) GetDBGlobalLock() error {
+	query := fmt.Sprintf("SELECT pg_advisory_lock(%v);", pig_lock_id)
+	if _, err := o.dbconnection.Exec(context.Background(), query); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // ExecuteUp - execute UP migrations

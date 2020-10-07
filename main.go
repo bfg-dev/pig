@@ -100,6 +100,11 @@ func main() {
 
 	manager := migration.NewManager(db, "pig_version_table", "pig_history_table", *dir)
 
+	output.Info1("Waiting for global lock")
+	if err := manager.GetDBGlobalLock(); err != nil {
+		output.Fatalf("global lock error: %v", err)
+	}
+
 	run(command, manager, *note, *gitinfo, *onlyPlan, arguments)
 }
 
@@ -114,6 +119,7 @@ func upAndDown(f func(*migration.Meta) error, migrations *migration.Migrations, 
 		log.Println("There are no migrations to execute")
 		return
 	}
+
 	for _, m := range migrations.Items {
 		m.Note = note
 		m.GITinfo = gitinfo
