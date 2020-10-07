@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	pig_lock_id = 0x7069670000000000 // pig00000
+	pigLockID = 0x7069670000000000 // pig00000
 )
 
 // Manager - operation manager
@@ -367,7 +367,7 @@ func (o *Manager) GetHistoryForNote(note string) ([]*db.RecHistory, error) {
 
 // GetDBGlobalLock - get global lock in PG
 func (o *Manager) GetDBGlobalLock() error {
-	query := fmt.Sprintf("SELECT pg_advisory_lock(%v);", pig_lock_id)
+	query := fmt.Sprintf("SELECT pg_advisory_lock(%v);", pigLockID)
 	if _, err := o.dbconnection.Exec(context.Background(), query); err != nil {
 		return err
 	}
