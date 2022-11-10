@@ -15,7 +15,7 @@ import (
 	"github.com/bfg-dev/pig/migration"
 	"github.com/bfg-dev/pig/output"
 
-	pgx "github.com/jackc/pgx/v4"
+	pgx "github.com/jackc/pgx/v5"
 )
 
 var (

@@ -8,7 +8,7 @@ import (
 	"github.com/bfg-dev/pig/db"
 	"github.com/bfg-dev/pig/file"
 
-	pgx "github.com/jackc/pgx/v4"
+	pgx "github.com/jackc/pgx/v5"
 )
 
 const (
